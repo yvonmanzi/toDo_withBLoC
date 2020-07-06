@@ -1,11 +1,12 @@
 import 'package:fluttertodoapp/src/repository/firebase_instance_provider.dart';
 import 'package:meta/meta.dart';
 
-class FirebaseRepository {
+import '../models/models.dart';
+
+class TodoRepository {
   final FirebaseInstanceProvider _firebaseInstanceProvider;
 
-  FirebaseRepository(
-      {@required FirebaseInstanceProvider firebaseInstanceProvider})
+  TodoRepository({@required FirebaseInstanceProvider firebaseInstanceProvider})
       : assert(firebaseInstanceProvider != null),
         _firebaseInstanceProvider = firebaseInstanceProvider;
 
@@ -15,5 +16,9 @@ class FirebaseRepository {
 
   Future<List<Task>> getTasks() async {
     return await _firebaseInstanceProvider.getAllTasks();
+  }
+
+  Future<void> deleteTask({@required String taskName}) async {
+    return await _firebaseInstanceProvider.deleteTask(taskName: taskName);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 
+import '../models/models.dart';
+
 class FirebaseInstanceProvider {
   final Firestore _firestoreInstance;
 
@@ -10,7 +12,7 @@ class FirebaseInstanceProvider {
 
   Future<void> addTask({@required String taskName}) async {
     try {
-      _firestoreInstance
+      await _firestoreInstance
           .collection('toDos')
           .document('${taskName.toLowerCase()}')
           .setData({'task': taskName});
@@ -32,7 +34,7 @@ class FirebaseInstanceProvider {
 
   Future<List<Task>> getAllTasks() async {
     try {
-      return await _firestoreInstance.collection('toDos').getDocuments().then(
+      return await _firestoreInstance.collection('task').getDocuments().then(
           (QuerySnapshot snapshot) => snapshot.documents
               .map((document) => Task.fromMap(document.data))
               .toList());
@@ -40,19 +42,5 @@ class FirebaseInstanceProvider {
       print("couldn't get tasks");
       return null;
     }
-  }
-}
-
-class Task {
-  final String _task;
-
-  Task({@required String task})
-      : assert(task != null),
-        _task = task;
-
-  String get task => _task;
-
-  static Task fromMap(Map<dynamic, dynamic> documentData) {
-    return Task(task: documentData['task']);
   }
 }
